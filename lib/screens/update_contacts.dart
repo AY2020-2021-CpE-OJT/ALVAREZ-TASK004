@@ -4,7 +4,6 @@ import 'package:updated_app/screens/contacts.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-// 172.27.176.1:3000/quotes/
 class ContactData {
   final String lastName;
   final String firstName;
@@ -13,12 +12,56 @@ class ContactData {
   ContactData(this.lastName, this.firstName, this.phoneNumbers);
 }
 
-class AddContacts extends StatefulWidget {
-  @override
-  _AddContactsState createState() => _AddContactsState();
+Future<SpecificContact> fetchSpecificContact(String id) async {
+  final response = await http
+      .get(Uri.parse('https://kisi-api.herokuapp.com/contacts/get/' + id));
+  print('Status [Success]: Got the ID [$id]');
+  if (response.statusCode == 200) {
+    print('Status [Success]: Specific Data Appended');
+    return SpecificContact.fromJson(json.decode(response.body));
+  } else {
+    throw Exception('Status [Failed]: Cannot load Contact');
+  }
 }
 
-class _AddContactsState extends State<AddContacts> {
+class SpecificContact {
+  SpecificContact({
+    required this.phoneNumbers,
+    required this.id,
+    required this.firstName,
+    required this.lastName,
+    required this.v,
+  });
+
+  List<String> phoneNumbers;
+  String id;
+  String firstName;
+  String lastName;
+  int v;
+
+  factory SpecificContact.fromJson(Map<String, dynamic> json) =>
+      SpecificContact(
+        phoneNumbers: List<String>.from(json["phone_numbers"].map((x) => x)),
+        id: json["_id"],
+        firstName: json["first_name"],
+        lastName: json["last_name"],
+        v: json["__v"],
+      );
+}
+
+class UpdateContacts extends StatefulWidget {
+  final String specificID;
+
+  const UpdateContacts({Key? key, required this.specificID}) : super(key: key);
+  @override
+  _UpdateContactsState createState() => _UpdateContactsState(specificID);
+}
+
+class _UpdateContactsState extends State<UpdateContacts> {
+  String specificID;
+
+  _UpdateContactsState(this.specificID);
+
   int key = 0, checkAdd = 0, listNumber = 1, _count = 1;
   String val = '';
   RegExp digitValidator = RegExp("[0-9]+");
@@ -31,6 +74,10 @@ class _AddContactsState extends State<AddContacts> {
   ];
 
   List<ContactData> contactsAppend = <ContactData>[];
+  List<ContactData> contactsAppendSave = <ContactData>[];
+
+  late Future<SpecificContact> futureSpecificContact;
+
   String _typeSelected = '';
   @override
   void initState() {
@@ -39,6 +86,7 @@ class _AddContactsState extends State<AddContacts> {
     super.initState();
     _fnameController = TextEditingController();
     _lnameController = TextEditingController();
+    futureSpecificContact = fetchSpecificContact(specificID);
   }
 
   Widget _buildContactType(String title) {
@@ -71,105 +119,137 @@ class _AddContactsState extends State<AddContacts> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Save Contact'),
+        title: Text('Update Contact'),
       ),
-      body: Container(
-        margin: EdgeInsets.all(15),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            TextFormField(
-              controller: _fnameController,
-              decoration: InputDecoration(
-                hintText: 'First Name',
-                prefixIcon: Icon(
-                  Icons.account_circle,
-                  size: 30,
-                ),
-                fillColor: Colors.white,
-                filled: true,
-                contentPadding: EdgeInsets.all(15),
-              ),
-            ),
-            TextFormField(
-              controller: _lnameController,
-              decoration: InputDecoration(
-                hintText: 'Last Name',
-                prefixIcon: Icon(
-                  Icons.account_circle,
-                  size: 30,
-                ),
-                fillColor: Colors.white,
-                filled: true,
-                contentPadding: EdgeInsets.all(15),
-              ),
-            ),
-            SizedBox(height: 20),
-            Text("Contact Number/s: $listNumber",
-                style: TextStyle(color: Color(0xFF5B3415))),
-            SizedBox(height: 20),
-            Flexible(
-              child: ListView.builder(
-                  reverse: true,
-                  shrinkWrap: true,
-                  itemCount: _count,
-                  itemBuilder: (context, index) {
-                    return _row(index, context);
-                  }),
-            ),
-            SizedBox(
-              height: 15,
-            ),
-            Container(
-              height: 40,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                children: [
-                  _buildContactType('Work'),
-                  SizedBox(width: 10),
-                  _buildContactType('Family'),
-                  SizedBox(width: 10),
-                  _buildContactType('Friends'),
-                  SizedBox(width: 10),
-                  _buildContactType('Others'),
-                  SizedBox(width: 10),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 25,
-            ),
-            Container(
-              width: double.infinity,
-              padding: EdgeInsets.symmetric(horizontal: 10),
-              child: ElevatedButton(
-                child: Text(
-                  'Save Contact',
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: Colors.white,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                onPressed: () {
-                  saveContact();
-                  Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              CheckScreen(todo: contactsAppend)),
-                      (_) => false);
-                },
-                style: ElevatedButton.styleFrom(
-                    primary: Colors.purple,
-                    elevation: 5,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30)),
-                    padding: EdgeInsets.all(20)),
-              ),
-            )
-          ],
+      body: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+        child: Container(
+          padding: const EdgeInsets.all(20.0),
+          child: FutureBuilder<SpecificContact>(
+            future: futureSpecificContact,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                String? name1 = Text(snapshot.data!.firstName.toString()).data;
+                String? name2 = Text(snapshot.data!.lastName.toString()).data;
+                List<String> listPhonenums = <String>[];
+                for (int i = 0; i < snapshot.data!.phoneNumbers.length; i++) {
+                  listPhonenums.add(snapshot.data!.phoneNumbers[i]);
+                }
+                List<String> reverseNumbers = listPhonenums.reversed.toList();
+                return _nameForms(name1!, name2!, reverseNumbers, context);
+              } else if (snapshot.hasError) {
+                return Text("${snapshot.error}");
+              }
+              return Center(
+                  child: CircularProgressIndicator(
+                      valueColor:
+                          AlwaysStoppedAnimation<Color>(Color(0xFF5B3415))));
+            },
+          ),
         ),
+      ),
+    );
+  }
+
+  _nameForms(String contentFname, String contentLname, List<String> listPhonenums, context) {
+    return Container(
+      margin: EdgeInsets.all(15),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text("Name: " + contentFname + " " +contentLname),
+          TextFormField(
+            controller: _fnameController,
+            decoration: InputDecoration(
+              hintText: 'First Name',
+              prefixIcon: Icon(
+                Icons.account_circle,
+                size: 30,
+              ),
+              fillColor: Colors.white,
+              filled: true,
+              contentPadding: EdgeInsets.all(15),
+            ),
+          ),
+          TextFormField(
+            controller: _lnameController,
+            decoration: InputDecoration(
+              hintText: 'Last Name',
+              prefixIcon: Icon(
+                Icons.account_circle,
+                size: 30,
+              ),
+              fillColor: Colors.white,
+              filled: true,
+              contentPadding: EdgeInsets.all(15),
+            ),
+          ),
+          SizedBox(height: 20),
+          Text("Contact Number/s: $listNumber",
+              style: TextStyle(color: Color(0xFF5B3415))),
+          SizedBox(height: 20),
+          Flexible(
+            child: ListView.builder(
+                reverse: true,
+                shrinkWrap: true,
+                itemCount: _count,
+                itemBuilder: (context, index) {
+                  return _row(index, context);
+                }),
+          ),
+          SizedBox(
+            height: 15,
+          ),
+          Container(
+            height: 40,
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              children: [
+                _buildContactType('Work'),
+                SizedBox(width: 10),
+                _buildContactType('Family'),
+                SizedBox(width: 10),
+                _buildContactType('Friends'),
+                SizedBox(width: 10),
+                _buildContactType('Others'),
+                SizedBox(width: 10),
+              ],
+            ),
+          ),
+          SizedBox(
+            height: 25,
+          ),
+          Container(
+            width: double.infinity,
+            padding: EdgeInsets.symmetric(horizontal: 10),
+            child: ElevatedButton(
+              child: Text(
+                'Save Contact',
+                style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.white,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              onPressed: () {
+                saveContact();
+                Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => CheckScreen(
+                            todo: contactsAppend, specificID: specificID)),
+                    (_) => false);
+              },
+              style: ElevatedButton.styleFrom(
+                  primary: Colors.purple,
+                  elevation: 5,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30)),
+                  padding: EdgeInsets.all(20)),
+            ),
+          )
+        ],
       ),
     );
   }
@@ -273,15 +353,18 @@ class _AddContactsState extends State<AddContacts> {
 
 class CheckScreen extends StatelessWidget {
   final List<ContactData> todo;
+  final String specificID;
 
-  const CheckScreen({Key? key, required this.todo}) : super(key: key);
+  const CheckScreen({Key? key, required this.todo, required this.specificID})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     Future<http.Response> createContact(
         String fname, String lname, List pnums) {
-      return http.post(
-        Uri.parse('https://kisi-api.herokuapp.com/contacts/new'),
+      return http.patch(
+        Uri.parse(
+            'https://kisi-api.herokuapp.com/contacts/update/' + specificID),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -314,7 +397,7 @@ class CheckScreen extends StatelessWidget {
                   SizedBox(
                     height: 40,
                   ),
-                  Text('Created Successfully',
+                  Text('Updated Successfully',
                       style: TextStyle(
                           color: Colors.red,
                           fontWeight: FontWeight.bold,
