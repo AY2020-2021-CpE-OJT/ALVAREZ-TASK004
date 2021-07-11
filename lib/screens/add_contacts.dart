@@ -157,7 +157,7 @@ class _AddContactsState extends State<AddContacts> {
                       context,
                       MaterialPageRoute(
                           builder: (context) =>
-                              CheckScreen(todo: contactsAppend)),
+                              CheckScreen(contacts: contactsAppend)),
                       (_) => false);
                 },
                 style: ElevatedButton.styleFrom(
@@ -181,7 +181,7 @@ class _AddContactsState extends State<AddContacts> {
         Expanded(
           child: TextFormField(
             onFieldSubmitted: (_) => FocusScope.of(context).unfocus(),
-            controller: _numberController[key],
+            controller: _numberController[key],//_numberController[0] != _numberController[1]
             textCapitalization: TextCapitalization.sentences,
             maxLength: 11,
             keyboardType: TextInputType.phone,
@@ -226,10 +226,7 @@ class _AddContactsState extends State<AddContacts> {
     List<String> reversedpnums = number.reversed.toList();
 
     setState(() {
-      contactsAppend.insert(
-          0,
-          ContactData(
-              _lnameController.text, _fnameController.text, reversedpnums));
+      contactsAppend.insert(0,ContactData(_lnameController.text, _fnameController.text, reversedpnums));
     });
     print('Status Append Contacts [Success]');
   }
@@ -272,9 +269,9 @@ class _AddContactsState extends State<AddContacts> {
 }
 
 class CheckScreen extends StatelessWidget {
-  final List<ContactData> todo;
+  final List<ContactData> contacts;
 
-  const CheckScreen({Key? key, required this.todo}) : super(key: key);
+  const CheckScreen({Key? key, required this.contacts}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -294,7 +291,7 @@ class CheckScreen extends StatelessWidget {
     }
 
     List<int> listNumbers = [];
-    for (int i = 0; i < todo[0].phoneNumbers.length; i++) {
+    for (int i = 0; i < contacts[0].phoneNumbers.length; i++) {
       listNumbers.add(i + 1);
     }
     return WillPopScope(
@@ -304,10 +301,10 @@ class CheckScreen extends StatelessWidget {
           title: Center(child: Text('Summary of Contacts')),
         ),
         body: ListView.builder(
-          itemCount: todo.length,
+          itemCount: contacts.length,
           itemBuilder: (context, index) {
-            createContact(todo[index].firstName, todo[index].lastName,
-                todo[index].phoneNumbers);
+            createContact(contacts[index].firstName, contacts[index].lastName,
+                contacts[index].phoneNumbers);
             return Container(
               child: Column(
                 children: <Widget>[
@@ -331,7 +328,7 @@ class CheckScreen extends StatelessWidget {
                               fontSize: 18,
                               fontWeight: FontWeight.bold),
                           textAlign: TextAlign.center),
-                      Text('${todo[index].firstName}',
+                      Text('${contacts[index].firstName}',
                           style: TextStyle(
                               color: Colors.deepOrangeAccent, fontSize: 30),
                           textAlign: TextAlign.center),
@@ -349,7 +346,7 @@ class CheckScreen extends StatelessWidget {
                               fontSize: 18,
                               fontWeight: FontWeight.bold),
                           textAlign: TextAlign.center),
-                      Text('${todo[index].lastName}',
+                      Text('${contacts[index].lastName}',
                           style: TextStyle(
                               color: Colors.deepOrangeAccent, fontSize: 30),
                           textAlign: TextAlign.center),
@@ -379,7 +376,7 @@ class CheckScreen extends StatelessWidget {
                                 'Phone #' +
                                     listNumbers[index].toString() +
                                     ':\t\t' +
-                                    todo[0].phoneNumbers[index].toString(),
+                                    contacts[0].phoneNumbers[index].toString(),
                                 style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 20,

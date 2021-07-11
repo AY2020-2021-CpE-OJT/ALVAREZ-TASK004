@@ -11,10 +11,9 @@ class Contacts extends StatefulWidget {
 
 class _ContactsState extends State<Contacts> {
   List users = [];
-  bool isLoading = false;
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     this.fetchUser();
   }
@@ -91,7 +90,7 @@ class _ContactsState extends State<Contacts> {
                               });
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
-                                  content: Text('$userDeleted dismissed'),
+                                  content: Text('$userDeleted contact deleted'),
                                 ),
                               );
                             },
@@ -146,32 +145,32 @@ class _ContactsState extends State<Contacts> {
                                           fontWeight: FontWeight.bold,
                                           fontSize: 20),
                                     ),
-                                    subtitle: Text(_phonenum(_users[index]),
-                                                              style: TextStyle(
-                                                                color: Colors
-                                                                    .black,
-                                                            
-                                                              ),),
-                                    trailing:  TextButton(
-                                                            onPressed: () {
-                                                              Navigator.pushAndRemoveUntil(
-                                                                  context,
-                                                                  MaterialPageRoute(
-                                                                      builder: (context) => UpdateContacts(
-                                                                          specificID: _users[index]['_id'].toString())),
-                                                                  (_) => false);
-                                                            },
-                                                            child: const Text(
-                                                              'EDIT',
-                                                              style: TextStyle(
-                                                                color: Colors
-                                                                    .pink,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                              ),
-                                                            ),
-                                                          ),
+                                    subtitle: Text(
+                                      _phonenum(_users[index]),
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                    trailing: TextButton(
+                                      onPressed: () {
+                                        Navigator.pushAndRemoveUntil(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    UpdateContacts(
+                                                        specificID:
+                                                            _users[index]['_id']
+                                                                .toString())),
+                                            (_) => false);
+                                      },
+                                      child: const Text(
+                                        'EDIT',
+                                        style: TextStyle(
+                                          color: Colors.pink,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
                                     onTap: () {
                                       List<int> listNumbers = [];
                                       for (int i = 0;
@@ -218,7 +217,6 @@ class _ContactsState extends State<Contacts> {
                                                                           .bold,
                                                                   fontSize:
                                                                       18)),
-                                                         
                                                         ],
                                                       ),
                                                       SizedBox(
@@ -270,8 +268,7 @@ class _ContactsState extends State<Contacts> {
                                                       child: const Text(
                                                         'OK',
                                                         style: TextStyle(
-                                                          color:
-                                                              Colors.purple,
+                                                          color: Colors.purple,
                                                           fontWeight:
                                                               FontWeight.bold,
                                                         ),
@@ -299,7 +296,7 @@ class _ContactsState extends State<Contacts> {
                 : Center(
                     child: CircularProgressIndicator(
                         valueColor:
-                            AlwaysStoppedAnimation<Color>(Color(0xFF5B3415))));
+                            AlwaysStoppedAnimation<Color>(Colors.purple),backgroundColor: Colors.pink,));
           },
         ),
       ),

@@ -130,14 +130,14 @@ class _UpdateContactsState extends State<UpdateContacts> {
             future: futureSpecificContact,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                String? name1 = Text(snapshot.data!.firstName.toString()).data;
-                String? name2 = Text(snapshot.data!.lastName.toString()).data;
+                String? firstNameData = Text(snapshot.data!.firstName.toString()).data;
+                String? lastNameData = Text(snapshot.data!.lastName.toString()).data;
                 List<String> listPhonenums = <String>[];
                 for (int i = 0; i < snapshot.data!.phoneNumbers.length; i++) {
                   listPhonenums.add(snapshot.data!.phoneNumbers[i]);
                 }
                 List<String> reverseNumbers = listPhonenums.reversed.toList();
-                return _nameForms(name1!, name2!, reverseNumbers, context);
+                return _nameForms(firstNameData!, lastNameData!, reverseNumbers, context);
               } else if (snapshot.hasError) {
                 return Text("${snapshot.error}");
               }
