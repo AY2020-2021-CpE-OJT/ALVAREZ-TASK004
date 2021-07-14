@@ -6,28 +6,28 @@ A new Flutter project.
 
 ##Test Upload
 
-##add
+
 ![alt text](https://github.com/AY2020-2021-CpE-OJT/ALVAREZ-TASK004/blob/main/appimages/add.png?raw=true)
 
-##contacts
+
 ![alt text](https://github.com/AY2020-2021-CpE-OJT/ALVAREZ-TASK004/blob/main/appimages/contacts.png?raw=true)
 
-##createsuccess
+
 ![alt text](https://github.com/AY2020-2021-CpE-OJT/ALVAREZ-TASK004/blob/main/appimages/success.png?raw=true)
 
-##refresh
+
 ![alt text](https://github.com/AY2020-2021-CpE-OJT/ALVAREZ-TASK004/blob/main/appimages/refresh.png?raw=true)
 
-##delete
+
 ![alt text](https://github.com/AY2020-2021-CpE-OJT/ALVAREZ-TASK004/blob/main/appimages/delete.png?raw=true)
 
-##deletesuccess
+
 ![alt text](https://github.com/AY2020-2021-CpE-OJT/ALVAREZ-TASK004/blob/main/appimages/deleted.png?raw=true)
 
-##update
+
 ![alt text](https://github.com/AY2020-2021-CpE-OJT/ALVAREZ-TASK004/blob/main/appimages/update.png?raw=true)
 
-##updatesuccess
+
 ![alt text](https://github.com/AY2020-2021-CpE-OJT/ALVAREZ-TASK004/blob/main/appimages/upsuccess.png?raw=true)
 
 
