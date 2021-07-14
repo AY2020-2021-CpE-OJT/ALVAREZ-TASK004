@@ -4,7 +4,7 @@ A new Flutter project.
 
 ## Getting Started
 
-##Test Upload
+##Test Upload (Modified application from the previous activity. A cloud integration. Connecting API to heroku and adding additional features in the UI.)
 
 
 ![alt text](https://github.com/AY2020-2021-CpE-OJT/ALVAREZ-TASK004/blob/main/appimages/add.png?raw=true)
