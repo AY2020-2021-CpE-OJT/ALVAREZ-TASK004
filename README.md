@@ -1,10 +1,10 @@
 # updated_app
 
-A new Flutter project.
+(Modified application from the previous activity. A cloud integration. Connecting API to heroku and adding additional features in the UI.)
 
 ## Getting Started
 
-##Test Upload (Modified application from the previous activity. A cloud integration. Connecting API to heroku and adding additional features in the UI.)
+##Test Upload 
 
 
 ![alt text](https://github.com/AY2020-2021-CpE-OJT/ALVAREZ-TASK004/blob/main/appimages/add.png?raw=true)
