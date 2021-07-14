@@ -295,8 +295,9 @@ class _ContactsState extends State<Contacts> {
                   )
                 : Center(
                     child: CircularProgressIndicator(
-                        valueColor:
-                            AlwaysStoppedAnimation<Color>(Colors.purple),backgroundColor: Colors.pink,));
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.purple),
+                    backgroundColor: Colors.pink,
+                  ));
           },
         ),
       ),

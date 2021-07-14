@@ -121,23 +121,23 @@ class _AddContactsState extends State<AddContacts> {
               height: 15,
             ),
             Container(
-              height: 40,
+              height: 30,
               child: ListView(
                 scrollDirection: Axis.horizontal,
                 children: [
                   _buildContactType('Work'),
-                  SizedBox(width: 10),
+                  SizedBox(width: 1),
                   _buildContactType('Family'),
-                  SizedBox(width: 10),
+                  SizedBox(width: 1),
                   _buildContactType('Friends'),
-                  SizedBox(width: 10),
+                  SizedBox(width: 1),
                   _buildContactType('Others'),
-                  SizedBox(width: 10),
+                  SizedBox(width: 1),
                 ],
               ),
             ),
             SizedBox(
-              height: 25,
+              height: 15,
             ),
             Container(
               width: double.infinity,
@@ -181,7 +181,8 @@ class _AddContactsState extends State<AddContacts> {
         Expanded(
           child: TextFormField(
             onFieldSubmitted: (_) => FocusScope.of(context).unfocus(),
-            controller: _numberController[key],//_numberController[0] != _numberController[1]
+            controller: _numberController[
+                key], //_numberController[0] != _numberController[1]
             textCapitalization: TextCapitalization.sentences,
             maxLength: 11,
             keyboardType: TextInputType.phone,
@@ -226,7 +227,10 @@ class _AddContactsState extends State<AddContacts> {
     List<String> reversedpnums = number.reversed.toList();
 
     setState(() {
-      contactsAppend.insert(0,ContactData(_lnameController.text, _fnameController.text, reversedpnums));
+      contactsAppend.insert(
+          0,
+          ContactData(
+              _lnameController.text, _fnameController.text, reversedpnums));
     });
     print('Status Append Contacts [Success]');
   }
@@ -311,7 +315,7 @@ class CheckScreen extends StatelessWidget {
                   SizedBox(
                     height: 40,
                   ),
-                  Text('Created Successfully',
+                  Text('Create Successfull',
                       style: TextStyle(
                           color: Colors.red,
                           fontWeight: FontWeight.bold,

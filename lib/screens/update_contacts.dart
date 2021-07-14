@@ -130,14 +130,17 @@ class _UpdateContactsState extends State<UpdateContacts> {
             future: futureSpecificContact,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                String? firstNameData = Text(snapshot.data!.firstName.toString()).data;
-                String? lastNameData = Text(snapshot.data!.lastName.toString()).data;
+                String? firstNameData =
+                    Text(snapshot.data!.firstName.toString()).data;
+                String? lastNameData =
+                    Text(snapshot.data!.lastName.toString()).data;
                 List<String> listPhonenums = <String>[];
                 for (int i = 0; i < snapshot.data!.phoneNumbers.length; i++) {
                   listPhonenums.add(snapshot.data!.phoneNumbers[i]);
                 }
                 List<String> reverseNumbers = listPhonenums.reversed.toList();
-                return _nameForms(firstNameData!, lastNameData!, reverseNumbers, context);
+                return _nameForms(
+                    firstNameData!, lastNameData!, reverseNumbers, context);
               } else if (snapshot.hasError) {
                 return Text("${snapshot.error}");
               }
@@ -152,13 +155,14 @@ class _UpdateContactsState extends State<UpdateContacts> {
     );
   }
 
-  _nameForms(String contentFname, String contentLname, List<String> listPhonenums, context) {
+  _nameForms(String contentFname, String contentLname,
+      List<String> listPhonenums, context) {
     return Container(
       margin: EdgeInsets.all(15),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("Name: " + contentFname + " " +contentLname),
+          Text("Name: " + contentFname + " " + contentLname),
           TextFormField(
             controller: _fnameController,
             decoration: InputDecoration(
@@ -202,23 +206,23 @@ class _UpdateContactsState extends State<UpdateContacts> {
             height: 15,
           ),
           Container(
-            height: 40,
+            height: 30,
             child: ListView(
               scrollDirection: Axis.horizontal,
               children: [
                 _buildContactType('Work'),
-                SizedBox(width: 10),
+                SizedBox(width: 1),
                 _buildContactType('Family'),
-                SizedBox(width: 10),
+                SizedBox(width: 1),
                 _buildContactType('Friends'),
-                SizedBox(width: 10),
+                SizedBox(width: 1),
                 _buildContactType('Others'),
-                SizedBox(width: 10),
+                SizedBox(width: 1),
               ],
             ),
           ),
           SizedBox(
-            height: 25,
+            height: 15,
           ),
           Container(
             width: double.infinity,
@@ -397,7 +401,7 @@ class CheckScreen extends StatelessWidget {
                   SizedBox(
                     height: 40,
                   ),
-                  Text('Updated Successfully',
+                  Text('Update Successfull',
                       style: TextStyle(
                           color: Colors.red,
                           fontWeight: FontWeight.bold,
