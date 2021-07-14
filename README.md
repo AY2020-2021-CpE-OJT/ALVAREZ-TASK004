@@ -1,7 +1,7 @@
 # updated_app
 
 (Modified application from the previous activity. A cloud integration. Connecting API to heroku and adding additional features in the UI.)
-(Included features: delete and update)
+(Included features: add, delete, and update contacts)
 
 ## Getting Started
 
